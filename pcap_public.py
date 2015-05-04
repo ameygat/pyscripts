@@ -47,25 +47,25 @@ for timestamp, buf in pcap.readpkts():
 			ip_list.append(dstip.format())
 		
 	    if tcp.__class__.__name__ == 'UDP' or tcp.__class__.__name__ == 'TCP' :
-		if tcp.sport == 53 or tcp.dport == 53:
-			if eth.type == 2048 and ip.p == 17 :
-				try:
-					dns = dpkt.dns.DNS(tcp.data)
-				except:
-					#print "Error:DNS"
-        			continue # Discard errornous Data
-				if dns.qr == dpkt.dns.DNS_R and dns.opcode == dpkt.dns.DNS_QUERY and dns.rcode == dpkt.dns.DNS_RCODE_NOERR:
-					if len(dns.an) >= 1:
-					    for answer in dns.an:
-						str1=""
-						if answer.type == 1: #DNS_A
-					    		str1 = "A:: %s->%s" % (answer.name,socket.inet_ntoa(answer.rdata))
-						elif answer.type == 5:  # "CNAME request"
-							str1 = "CN:: %s->%s" % (answer.name,anser.cname)
-   						elif answer.type == 12:
-     							#print "PTR request", answer.name, "\tresponse", answer.ptrname
-							str1 = "PTR:: %s->%s" % (answer.name,answer.ptrname)
-						if str1<> "" : dns_list.append(str1)
+		    if tcp.sport == 53 or tcp.dport == 53:
+			    if eth.type == 2048 and ip.p == 17 :
+				    try:
+					    dns = dpkt.dns.DNS(tcp.data)
+				    except:
+					    #print "Error:DNS"
+            			continue # Discard errornous Data
+				    if dns.qr == dpkt.dns.DNS_R and dns.opcode == dpkt.dns.DNS_QUERY and dns.rcode == dpkt.dns.DNS_RCODE_NOERR:
+					    if len(dns.an) >= 1:
+					        for answer in dns.an:
+						    str1=""
+						    if answer.type == 1: #DNS_A
+					        		str1 = "A:: %s->%s" % (answer.name,socket.inet_ntoa(answer.rdata))
+						    elif answer.type == 5:  # "CNAME request"
+							    str1 = "CN:: %s->%s" % (answer.name,anser.cname)
+       						elif answer.type == 12:
+         							#print "PTR request", answer.name, "\tresponse", answer.ptrname
+							    str1 = "PTR:: %s->%s" % (answer.name,answer.ptrname)
+						    if str1<> "" : dns_list.append(str1)
 
 	    if tcp.__class__.__name__ == 'TCP':
             if tcp.dport in http_ports and len(tcp.data) > 0:
